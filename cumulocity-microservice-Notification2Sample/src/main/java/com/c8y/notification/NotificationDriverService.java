@@ -207,16 +207,16 @@ public class NotificationDriverService {
 
 				log.error("We got an exception: " + t);
 				if (t instanceof UpgradeException) {
-					if (t.getMessage().contains("Unexpected HTTP Response Status Code: 409 Conflict")) {
+				
 						log.warn(
-								"The websocket connection was not successful. Wait till the platfrom clears previous websocket state...");
+								"The websocket connection was not successful. Will attempt to reconnect after delay...");
 						websocketConnections.get(tenantId).setConnectionStatus(ConnectionStatus.DISCONNECTED);
 						if (microserviceMOId.isPresent()) {
 							alarmService.createAlarm(microserviceMOId.get(), "WebsocketDisconnect" + tenantId);
 						} else {
 							log.warn("Unable to get microservice managed object id. Unable to post alarm");
 						}
-					}
+					
 				}
 			}
 
